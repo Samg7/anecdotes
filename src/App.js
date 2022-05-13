@@ -24,18 +24,40 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
   ]
 
+  // State definitions
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(new Array(7).fill(0));
+  const [index, setIndex] = useState(0);
+
+  // Helper method(s)
+  const generateNewIndex = () => {
+    const i = generateRandomNumber(0, 6);
+    setIndex(i);
+  };
 
   // Handle next anecdote 
   const changeAnecdote = () => {
-    const index = generateRandomNumber(0, 6);
+    generateNewIndex();
     setSelected(index);
-  }
+  };
+
+  // Handle anecdote vote
+  // pre: 0 <= index <= 6
+  const voteOnAnecdote = () => {
+    // copy the array before updating the tally
+    const votesCopy = [...votes]
+    votesCopy[selected] += 1;
+    setVotes(votesCopy)
+  };
+
+  // DELETE LATER
+  console.log(votes)
 
   return (
     <div>
       {anecdotes[selected]}
       <div>
+        <Button handleClick={voteOnAnecdote} label='vote' />
         <Button handleClick={changeAnecdote} label='next anecdote' />
       </div>
     </div>
