@@ -1,8 +1,13 @@
 import { useState } from "react";
 
-const Title = ({label}) => {
+const Anecdote = ({text, voteTally}) => {
   return (
-    <h1>{label}</h1>
+    <>
+      {text}
+      <div>
+        has {voteTally} votes
+      </div>
+    </>
   )
 };
 
@@ -13,10 +18,6 @@ const Button = ({handleClick, label}) => {
     </>
   )
 };
-
-// Randomly generate an integer between [min, max] inclusive
-const generateRandomNumber = (min, max) => 
-    Math.floor(Math.random() * (max - min + 1) + min);
 
 const App = () => {
   const anecdotes = [
@@ -33,10 +34,15 @@ const App = () => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Array(7).fill(0));
   const [index, setIndex] = useState(0);
+  const [mostVotedIndex, setMostVotedIndex] = useState(0);
 
-  // Helper method(s)
+  // Helper function(s)
+  // Randomly generate an integer between [min, max] inclusive
+  const generateRandomNumber = (min, max) => 
+    Math.floor(Math.random() * (max - min + 1) + min);
+
   const generateNewIndex = () => {
-    const i = generateRandomNumber(0, 6);
+    const i = generateRandomNumber(0, anecdotes.length - 1);
     setIndex(i);
   };
 
@@ -54,19 +60,23 @@ const App = () => {
     setVotes(votesCopy)
   };
 
-  // DELETE LATER
-  console.log(votes)
+  // Update state of most voted anecdote to reflect change in index
+  for (let i = 0; i < anecdotes.length; i++) {
+    if (votes[i] > votes[mostVotedIndex]) {
+      setMostVotedIndex(i);
+    }
+  }
 
   return (
     <div>
-      <Title label='Anecdote of the day' />
-      {anecdotes[selected]}
-      <div>has {votes[selected]} votes</div>
+      <h3>Anecdote of the day</h3>
+      <Anecdote text={anecdotes[selected]} voteTally={votes[selected]} />
       <div>
         <Button handleClick={voteOnAnecdote} label='vote' />
         <Button handleClick={changeAnecdote} label='next anecdote' />
       </div>
-      <Title label='Anecdote with most votes' />
+      <h3>Anecdote with most votes</h3>
+      <Anecdote text={anecdotes[mostVotedIndex]} voteTally={votes[mostVotedIndex]} />
     </div>
   )
 };
