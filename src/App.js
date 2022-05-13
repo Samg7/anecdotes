@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+const Title = ({label}) => {
+  return (
+    <h1>{label}</h1>
+  )
+};
+
 const Button = ({handleClick, label}) => {
   return (
     <>
@@ -11,7 +17,6 @@ const Button = ({handleClick, label}) => {
 // Randomly generate an integer between [min, max] inclusive
 const generateRandomNumber = (min, max) => 
     Math.floor(Math.random() * (max - min + 1) + min);
-
 
 const App = () => {
   const anecdotes = [
@@ -42,7 +47,6 @@ const App = () => {
   };
 
   // Handle anecdote vote
-  // pre: 0 <= index <= 6
   const voteOnAnecdote = () => {
     // copy the array before updating the tally
     const votesCopy = [...votes]
@@ -55,12 +59,14 @@ const App = () => {
 
   return (
     <div>
+      <Title label='Anecdote of the day' />
       {anecdotes[selected]}
       <div>has {votes[selected]} votes</div>
       <div>
         <Button handleClick={voteOnAnecdote} label='vote' />
         <Button handleClick={changeAnecdote} label='next anecdote' />
       </div>
+      <Title label='Anecdote with most votes' />
     </div>
   )
 };
